@@ -1,0 +1,11 @@
+{
+  "name": "lab-shop",
+  "version": "1.0.0",
+  "description": "Lab for the course ExpressJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Valentin Staykov",
+  "license": "ISC"
+}
