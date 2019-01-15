@@ -13,10 +13,7 @@ function put(key, value, callback){
 
   db[key] = value;
 
-  if(callback !== undefined){
-    callback(key,value);
-  }
-
+  callback(true);
 }
 
 function get(key, callback){
@@ -28,11 +25,7 @@ function get(key, callback){
     throw 'Key does not exist.';
   }
 
-  if(callback !== undefined){
-    callback(dn[key]);
-  }
-
-  return db[key];
+  callback(dn[key]);
 }
 
 function getAll(callback){
@@ -40,11 +33,7 @@ function getAll(callback){
     throw 'DB is empty';
   }
 
-  if(callback !== undefined){
-    callback(db);
-  }
-
-  return db;
+  callback(db);
 }
 
 function update(key, newValue, callback){
@@ -56,11 +45,9 @@ function update(key, newValue, callback){
     throw 'Key does not exist.';
   }
 
-  if(callback !== undefined){
-    callback(key, newValue);
-  }
-
   db[key] = newValue;
+
+  callback(true);
 }
 
 function deleteEntry(key, callback){
@@ -72,38 +59,34 @@ function deleteEntry(key, callback){
     throw 'Key does not exist.';
   }
 
-  if(callback !== undefined){
-    callback(key);
-  }
-
-  delete db[key]
+  callback(true);
 }
 
 function clear(callback){
-  if(callback !== undefined){
-    callback(db);
-  }
-
   db = {};
+
+  callback(true);
 }
 
 function save(callback){
   var jsonData = JSON.stringify(db);
-  fs.writeFile("db.json", jsonData, function(err) {
+  fs.writeFileAsync("db.json", jsonData,'utf-8', function(err) {
       if (err) {
           console.log(err);
       }
   });
-  if(callback !== undefined){
-    callback(db);
-  }
+
+  callback(true);
 }
 
 function load(callback){
-  db = JSON.parse(fs.readFile('db.json'));
-  if(callback !== undefined){
-    callback(db);
+  if(!fs.exists('db.json')){
+    return;
   }
+
+  db = JSON.parse(fs.readFile('db.json'));
+
+  callback(true);
 }
 
 module.exports = {put,get,getAll,update,deleteEntry,clear,save,load};
