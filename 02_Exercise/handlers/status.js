@@ -7,8 +7,8 @@ const db = require('../config/dataBase')
 module.exports = (req, res) => {
   req.pathName = req.pathname || url.parse(req.url).pathname;
 
-  if(req.pathName === '/viewAllMovies' && req.method === 'GET'){
-    let filePath = path.normalize(path.join(__dirname, '../views/viewAll.html'));
+  if(req.pathName === '/' && req.method === 'GET'){
+    let filePath = path.normalize(path.join(__dirname, '../views/status.html'));
     let stream = fs.readFile(filePath, 'utf-8', (err, data) =>{
       if(err){
         errorHandler.notFound(err, res);
@@ -19,21 +19,10 @@ module.exports = (req, res) => {
         'Content-Type': 'text/html',
       });
 
-      let moviesData = '';
-
-      for(let i=0; i<db.length; i++){
-        moviesData += '<div class="movie"><a href="/movies/details/'+i+'"><img class="moviePoster" src="'+ db[i].moviePoster +'" /></a></div>';
-      }
-
-
-      data = data.replace('{{replaceMe}}', moviesData);
-
-
+      data = data.replace('{{replaceMe}}', 'Total number of movies: '+ db.length);
       res.write(data);
       res.end();
-
     });
-
   } else {
     return true;
   }
