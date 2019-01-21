@@ -25,7 +25,7 @@ function get(key, callback){
     throw 'Key does not exist.';
   }
 
-  callback(dn[key]);
+  callback(db[key]);
 }
 
 function getAll(callback){
