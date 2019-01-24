@@ -21,6 +21,7 @@ module.exports = (req, res) => {
 
       let moviesData = '';
 
+      
       for(let i=0; i<db.length; i++){
         moviesData += '<div class="movie"><a href="/movies/details/'+i+'"><img class="moviePoster" src="'+ db[i].moviePoster +'" /></a></div>';
       }
