@@ -70,7 +70,7 @@ function clear(callback){
 
 function save(callback){
   var jsonData = JSON.stringify(db);
-  fs.writeFileAsync("db.json", jsonData,'utf-8', function(err) {
+  fs.writeFile("db.json", jsonData,'utf-8', function(err) {
       if (err) {
           console.log(err);
       }
@@ -84,7 +84,14 @@ function load(callback){
     return;
   }
 
-  db = JSON.parse(fs.readFile('db.json'));
+  fs.readFile('db.json', (err, data) =>{
+    if(err){
+      console.log(err);
+      return;
+    }
+    db = JSON.parse(data);
+  })
+
 
   callback(true);
 }
