@@ -27,6 +27,7 @@ function addImage(req, res){
         tags: tagFields.tagsID
       });
 
+      console.log(newImage);
       newImage.save();
     }
 

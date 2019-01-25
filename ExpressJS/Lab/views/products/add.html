@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>ShopStop</title>
-  <link rel="stylesheet" type="text/css" href="/content/styles/site.css">
+  <link rel="stylesheet" type="text/css" href="/content/styles/site.min.css">
   <link rel="icon" type="image/png" href="/content/images/favicon.ico">
 </head>
 <body>
@@ -19,7 +19,7 @@
     </nav>
   </header>
   <main>
-    <form class="form center-form" method="post">
+    <form class="form center-form" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label for="name">Name</label>
         <input id="name" name="name" type="text" class="input-field" />
@@ -39,7 +39,7 @@
 
       <div class="form-group">
         <label for="image">Image</label>
-        <input id="image" name="image" type="text" class="input-field" />
+        <input id="image" name="image" type="file" class="input-field" accept=".jpg,.png,.jpeg" />
       </div>
 
       <div class="form-group">

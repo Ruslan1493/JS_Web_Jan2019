@@ -3,6 +3,8 @@ const database = require('../config/database')
 const fs = require('fs')
 const path = require('path')
 const qs = require('querystring')
+const multiparty = require('multiparty')
+const shortId = require('shortid')
 
 module.exports = (req,res) => {
   req.filename = req.filename || url.parse(req.url).pathname
@@ -32,22 +34,54 @@ module.exports = (req,res) => {
       return;
     })
   } else if(req.pathname === '/product/add' && req.method === 'POST'){
-    let dataString = '';
+    let product = {};
+    let form = new multiparty.Form();
 
-    req.on('data', (data) => {
-      dataString += data;
+    form.on('part', (part) =>{
+      if(part.filename){
+        let dataString = '';
+
+        part.setEncoding('binary');
+
+        part.on('data', (data) =>{
+          dataString += data;
+        })
+
+        part.on('end', () =>{
+          let fileName = shortId.generate();
+          let filePath = '/content/images/' + fileName + '.jpg';
+
+          product.image = filePath;
+
+          fs.writeFile(`${__dirname + '../..' + filePath}`, dataString, {encoding: 'ascii'}, (err) => {
+            if(err){
+              console.log(err);
+              return;
+            }
+          })
+        })
+      } else {
+        part.setEncoding('utf-8');
+        let field = '';
+        part.on('data', (data) =>{
+          field += data;
+        })
+
+        part.on('end', () => {
+          product[part.name] = field;
+        })
+      }
     })
 
-    req.on('end', () => {
-      let product = qs.parse(dataString);
-      database.products.add(product);
-
-      res.writeHead(302, {
+    form.on('close', () =>{
+      database. products.add(product);
+      res.writeHead('302', {
         Location: '/'
       })
 
       res.end();
     })
+    form.parse(req);
   } else {
     return true;
   }

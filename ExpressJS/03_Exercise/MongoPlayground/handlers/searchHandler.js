@@ -26,7 +26,8 @@ module.exports = (req, res) => {
     if(params.tagName){
       Tag.findOne({name: params.tagName})
           .then(tag => {
-              searchObj.tags = tag._id
+              searchObj['tag._id'] = tag._id
+              console.log(searchObj.tag);
               query = Image.find(searchObj);
               query.limit(parseInt(params.Limit, 10)).exec((err,image) => {
                 console.log(image.length);
