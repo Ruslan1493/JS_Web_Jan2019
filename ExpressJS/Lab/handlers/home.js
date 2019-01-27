@@ -6,12 +6,24 @@ module.exports.index = (req, res) => {
     let queryData = req.query;
     let products = [];
 
-    Product.find().populate('ategory').then((products) => {
+    Product.find().populate('category').then((products) => {
       if(queryData.query){
         products = products.filter(
           product => product.name.toLowerCase()
           .includes(queryData.query))
       }
-    res.render('home/index',{products: products})
+    let data = {
+      products
+    };
+    if(req.query.error){
+      data.error = req.query.error;
+    }else if (req.query.success) {
+      data.success = req.query.success;
+    }
+    res.render('home/index',{
+      products: products,
+      error: data.error,
+      success: data.success
+    })
     })
 }
